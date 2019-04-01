@@ -17,7 +17,12 @@ void loop() {
   checkEncoders();
   //printData();
 
-  //State machine
+  // State machine
+  spiralStateMachine();
+
+}
+
+void spiralStateMachine () {
   switch(state) {
     case 0:
       if((millis() - oldTime) > 5000) {
@@ -26,11 +31,15 @@ void loop() {
       break;
 
     case 1:
-      goStraight();
+      goSpiral();
       break;
 
     case 2:
       turnRandom();
+      break;
+
+    case 3:
+      goStraight();
       break;
       
     case 99:

@@ -1,5 +1,5 @@
 
-void goStraight() {
+void goStraightSpiral() {
   outputPIDdistance = distancePID.Compute(totalDistance, targetDistance, false);
   outputPIDangle = anglePID.Compute(angle, targetAngle, false);
 
@@ -12,7 +12,33 @@ void goStraight() {
   //Check if object in the way
   distance = readDistance();
   
-  if(distance <= 6) {
+  if(distance <= 6 || abs(totalDistance - targetDistance) < 100) {
+    int randomSide = (int)random(-1,1);
+    targetAngle = angle + (randomSide * 90);
+    targetDistance = totalDistance + 6000 ;
+    state = 1;
+    logarithmicCount = 0;
+  }
+
+  
+}
+
+void goSpiral() {
+  outputPIDdistance = distancePID.Compute(totalDistance, targetDistance, false);
+  outputPIDangle = anglePID.Compute(angle, targetAngle, false);
+  logarithmicCount += 0.001;
+  double spiralFactor = 2.5*atan(log(sqrt(logarithmicCount+1))) / PI;
+
+  double leftOut = spiralFactor * outputPIDdistance;
+  double rightOut = outputPIDdistance;
+
+  motors.setLeftSpeed(leftOut);
+  motors.setRightSpeed(rightOut);
+
+  //Check if object in the way
+  distance = readDistance();
+  
+  if(distance <= 6 || abs(totalDistance - targetDistance) < 100) {
     int randomSide = (int)random(-1,1);
     targetAngle = angle + (randomSide * 90);
     state = 2;
@@ -21,7 +47,7 @@ void goStraight() {
   
 }
 
-void turnRandom() {
+void turnRandomSpiral() {
   outputPIDangle = anglePID.Compute(angle, targetAngle, false);
   
   double leftOut = -outputPIDangle;
@@ -48,9 +74,9 @@ void turnRandom() {
     motors.setLeftSpeed(0);
     motors.setRightSpeed(0);
 
-    targetDistance = totalDistance + standardDistance ;
+    targetDistance = totalDistance + 1000 ;
 
-    state = 1;
+    state = 3;
 
   }
 

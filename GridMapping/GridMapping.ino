@@ -31,6 +31,7 @@ double scale_x, scale_y, scale_z;
 double targetDistance = 6000;
 double standardDistance = targetDistance;
 double totalDistance = 0;
+double previousDistance = 0;
 
 double distanceKp = 4.0;
 double distanceKi = 0.0;
@@ -73,3 +74,6 @@ double yPos = 0;
 
 //Distance
 double distance;
+
+// Spiral Factor
+double logarithmicCount = 0;
